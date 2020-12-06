@@ -1,4 +1,4 @@
-import * as IngredientService from '../services/Ingredient'
+import * as IngredientService from '../services/IngredientService'
 import { Request, Response } from 'express'
 import util from 'util'
 

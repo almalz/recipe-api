@@ -24,7 +24,7 @@ model Recipe {
 
 model Ingredient {
   id                        Int                   @id @default(autoincrement())
-  name                      String
+  name                      String                @unique
   alternativeNames          Ingredient[]          @relation("IngredientToIngredient")
   alternativeIngredientName Ingredient?           @relation("IngredientToIngredient", fields: [alternativeingredientId], references: [id])
   alternativeingredientId   Int?
