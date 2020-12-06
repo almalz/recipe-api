@@ -1,5 +1,5 @@
 import express from 'express'
-import IngredientRouter from './Ingredient'
+import IngredientRouter from './IngredientRoutes'
 
 const router = express.Router()
 

@@ -1,7 +1,7 @@
 import * as express from 'express'
 const router = express.Router()
 
-import * as IngredientController from '../controllers/IngredientController'
+import { IngredientController } from '../controllers'
 
 router.get('/:id', IngredientController.getIngredient)
 router.get('/', IngredientController.getAllIngredients)

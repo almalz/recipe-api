@@ -1,6 +1,5 @@
-import * as IngredientService from '../services/IngredientService'
+import { IngredientService } from '../services'
 import { Request, Response } from 'express'
-import util from 'util'
 
 export const getIngredient = async (req: Request, res: Response) => {
   const { id } = req.body
@@ -14,7 +13,6 @@ export const getIngredient = async (req: Request, res: Response) => {
 
 export const getAllIngredients = async (req: Request, res: Response) => {
   const ingredients = await IngredientService.getAllIngredients()
-  console.log('Result', util.inspect(ingredients), false, null, true)
   if (ingredients) {
     res.json(ingredients).send()
   } else {
