@@ -33,3 +33,13 @@ export const postIngredient = async (req: Request, res: Response) => {
     res.status(422).send('Could not create ingredient')
   }
 }
+
+export const deleteIngredient = async (req: Request, res: Response) => {
+  const { id } = req.params
+  const result = await IngredientService.deleteIngredient(Number(id))
+  if (result) {
+    res.json(result)
+  } else {
+    res.status(422).send(`Could not delete ingredient with id ${id}`)
+  }
+}

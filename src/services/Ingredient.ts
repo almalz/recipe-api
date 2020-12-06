@@ -50,3 +50,11 @@ export const postIngredient = async (body: any) => {
   )
   return ingredient
 }
+
+export const deleteIngredient = async (ingredientId: number) => {
+  console.log(ingredientId)
+  const ingredient = await prisma.ingredient.delete({
+    where: { id: ingredientId },
+  })
+  return ingredient
+}
