@@ -1,5 +1,6 @@
 import { IngredientService } from '../services'
 import { Request, Response } from 'express'
+import { Ingredient } from '@prisma/client'
 
 export const getIngredient = async (req: Request, res: Response) => {
   const { id } = req.body
@@ -21,9 +22,8 @@ export const getAllIngredients = async (req: Request, res: Response) => {
 }
 
 export const postIngredient = async (req: Request, res: Response) => {
-  const { name } = req.body
-
-  const result = await IngredientService.postIngredient({ name })
+  const { ingredient } = req.body
+  const result: any = await IngredientService.postIngredient(ingredient)
 
   if (result) {
     res.json(result)

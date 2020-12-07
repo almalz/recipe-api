@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { Ingredient, PrismaClient } from '@prisma/client'
 import util from 'util'
 
 const prisma = new PrismaClient()
@@ -14,7 +14,7 @@ export const getIngredientById = async (ingredientId: number) => {
 
   console.log(
     console.log(
-      `Fetching ingredient`,
+      'Fetching ingredient',
       util.inspect(ingredient, false, null, true),
     ),
   )
@@ -31,7 +31,7 @@ export const getIngredientByName = async (ingredientName: string) => {
     .catch((error) => console.error(error))
 
   console.log(
-    `Fetching ingredient`,
+    'Fetching ingredient',
     util.inspect(ingredient, false, null, true),
   )
   return ingredient
@@ -43,13 +43,14 @@ export const getAllIngredients = async () => {
     .catch((error) => console.error(error))
 
   console.log(
-    `Fetching ingredients`,
+    'Fetching ingredients',
     util.inspect(ingredients, false, null, true),
   )
   return ingredients
 }
 
-export const postIngredient = async (body: any) => {
+export const postIngredient = async (body: Ingredient) => {
+  console.log('body', body)
   const { name } = body
   const ingredient = await prisma.ingredient
     .create({
@@ -58,7 +59,7 @@ export const postIngredient = async (body: any) => {
     .catch((error) => console.error(error))
 
   console.log(
-    `Creating ingredient`,
+    'Creating ingredient',
     util.inspect(ingredient, false, null, true),
   )
   return ingredient
@@ -73,7 +74,7 @@ export const deleteIngredient = async (ingredientId: number) => {
     .catch((error) => console.error(error))
 
   console.log(
-    `Deleting ingredient`,
+    'Deleting ingredient',
     util.inspect(ingredient, false, null, true),
   )
   return ingredient
