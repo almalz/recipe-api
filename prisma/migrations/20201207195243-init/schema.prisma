@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -50,15 +50,15 @@ enum System {
 model Unit {
   id                   Int                   @id @default(autoincrement())
   system               System
-  symbol               String                @unique
-  name                 String                @unique
+  symbol               String
+  name                 String
   IngredientsOnRecipes IngredientsOnRecipe[]
 }
 
 model Tag {
   id      Int      @id @default(autoincrement())
   kind    String
-  name    String   @unique
+  name    String
   recipes Recipe[]
 }
 
