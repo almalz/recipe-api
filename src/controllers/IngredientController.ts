@@ -1,10 +1,12 @@
 import { IngredientService } from '../services'
+import { Ingredient, IngredientListResult, IngredientResult } from './../types'
 import { Request, Response } from 'express'
-import { Ingredient } from '@prisma/client'
 
 export const getIngredient = async (req: Request, res: Response) => {
   const { id } = req.body
-  const ingredient = await IngredientService.getIngredientById(id)
+  const ingredient: IngredientResult = await IngredientService.getIngredientById(
+    id,
+  )
   if (ingredient) {
     res.json(ingredient)
   } else {
@@ -13,7 +15,7 @@ export const getIngredient = async (req: Request, res: Response) => {
 }
 
 export const getAllIngredients = async (req: Request, res: Response) => {
-  const ingredients = await IngredientService.getAllIngredients()
+  const ingredients: IngredientListResult = await IngredientService.getAllIngredients()
   if (ingredients) {
     res.json(ingredients).send()
   } else {
@@ -23,7 +25,9 @@ export const getAllIngredients = async (req: Request, res: Response) => {
 
 export const postIngredient = async (req: Request, res: Response) => {
   const { ingredient } = req.body
-  const result: any = await IngredientService.postIngredient(ingredient)
+  const result: IngredientResult = await IngredientService.postIngredient(
+    ingredient,
+  )
 
   if (result) {
     res.json(result)
@@ -34,7 +38,9 @@ export const postIngredient = async (req: Request, res: Response) => {
 
 export const deleteIngredient = async (req: Request, res: Response) => {
   const { id } = req.params
-  const result = await IngredientService.deleteIngredient(Number(id))
+  const result: IngredientResult = await IngredientService.deleteIngredient(
+    Number(id),
+  )
   if (result) {
     res.json(result)
   } else {

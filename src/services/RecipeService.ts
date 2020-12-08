@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client"
-import util from "util"
+import { PrismaClient } from '@prisma/client'
+import util from 'util'
 
 const prisma = new PrismaClient()
 
@@ -13,7 +13,7 @@ export const getRecipeById = async (recipeId: number) => {
     .catch((error) => console.error(error))
 
   console.log(
-    console.log("Fetching Recipe", util.inspect(recipe, false, null, true)),
+    console.log('Fetching Recipe', util.inspect(recipe, false, null, true)),
   )
   return recipe
 }
@@ -27,7 +27,7 @@ export const getRecipeByName = async (RecipeName: string) => {
     })
     .catch((error) => console.error(error))
 
-  console.log("Fetching Recipe", util.inspect(recipe, false, null, true))
+  console.log('Fetching Recipe', util.inspect(recipe, false, null, true))
   return recipe
 }
 
@@ -36,7 +36,7 @@ export const getAllRecipes = async () => {
     .findMany()
     .catch((error) => console.error(error))
 
-  console.log("Fetching Recipes", util.inspect(recipes, false, null, true))
+  console.log('Fetching Recipes', util.inspect(recipes, false, null, true))
   return recipes
 }
 
@@ -48,7 +48,7 @@ export const deleteRecipe = async (recipeId: number) => {
     })
     .catch((error) => console.error(error))
 
-  console.log("Deleting Recipe", util.inspect(recipe, false, null, true))
+  console.log('Deleting Recipe', util.inspect(recipe, false, null, true))
   return recipe
 }
 
@@ -60,6 +60,6 @@ export const postRecipe = async (body: any) => {
     })
     .catch((error) => console.error(error))
 
-  console.log("Creating Recipe", util.inspect(recipe, false, null, true))
+  console.log('Creating Recipe', util.inspect(recipe, false, null, true))
   return recipe
 }

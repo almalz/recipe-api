@@ -1,10 +1,11 @@
-import { Ingredient, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import { Ingredient, IngredientListResult, IngredientResult } from './../types'
 import util from 'util'
 
 const prisma = new PrismaClient()
 
 export const getIngredientById = async (ingredientId: number) => {
-  const ingredient = await prisma.ingredient
+  const ingredient: IngredientResult = await prisma.ingredient
     .findFirst({
       where: {
         id: ingredientId,
@@ -22,7 +23,7 @@ export const getIngredientById = async (ingredientId: number) => {
 }
 
 export const getIngredientByName = async (ingredientName: string) => {
-  const ingredient = await prisma.ingredient
+  const ingredient: IngredientResult = await prisma.ingredient
     .findFirst({
       where: {
         name: ingredientName,
@@ -38,7 +39,7 @@ export const getIngredientByName = async (ingredientName: string) => {
 }
 
 export const getAllIngredients = async () => {
-  const ingredients = await prisma.ingredient
+  const ingredients: IngredientListResult = await prisma.ingredient
     .findMany()
     .catch((error) => console.error(error))
 
@@ -50,9 +51,8 @@ export const getAllIngredients = async () => {
 }
 
 export const postIngredient = async (body: Ingredient) => {
-  console.log('body', body)
   const { name } = body
-  const ingredient = await prisma.ingredient
+  const ingredient: IngredientResult = await prisma.ingredient
     .create({
       data: { name: name },
     })
@@ -66,8 +66,7 @@ export const postIngredient = async (body: Ingredient) => {
 }
 
 export const deleteIngredient = async (ingredientId: number) => {
-  console.log(ingredientId)
-  const ingredient = await prisma.ingredient
+  const ingredient: IngredientResult = await prisma.ingredient
     .delete({
       where: { id: ingredientId },
     })
