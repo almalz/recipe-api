@@ -3,9 +3,9 @@ import { Ingredient, IngredientListResult, IngredientResult } from './../types'
 import { Request, Response } from 'express'
 
 export const getIngredient = async (req: Request, res: Response) => {
-  const { id } = req.body
+  const { id } = req.params
   const ingredient: IngredientResult = await IngredientService.getIngredientById(
-    id,
+    Number(id),
   )
   if (ingredient) {
     res.json(ingredient)
