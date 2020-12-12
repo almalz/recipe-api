@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import logger from '../config/logger'
+import { RecipeResult } from '../types'
 
 const prisma = new PrismaClient()
 
@@ -53,14 +54,37 @@ export const deleteRecipe = async (recipeId: number) => {
   return recipe
 }
 
+// TODO: replace 'any'
 export const postRecipe = async (body: any) => {
-  const { name } = body
-  const recipe = await prisma.recipe
+  const recipe: any = await prisma.recipe
     .create({
-      data: { name: name },
+      data: {
+        name: body.name,
+        prepTime: body.prepTime,
+        cookingTime: body.cookingTime,
+        sourceUrl: body.sourceUrl,
+        tags: {
+          connectOrCreate: body.tags,
+        },
+      },
     })
     .catch((error) => console.error(error))
   logger.debug('Creating recipe :', recipe)
+
+  const ingredientsOnRecipe = await prisma.ingredientsOnRecipe
+    .update({
+      where: { id: recipe.ingredientsOnRecipe.id },
+      data: {
+        recipe: {
+          connect: { id: recipe.id },
+        },
+        ingredient: {
+          connectOrCreate: body.ingredients,
+        },
+      },
+    })
+    .catch((error) => console.error(error))
+  logger.debug('Connecting recipe to ingredients:', ingredientsOnRecipe)
 
   return recipe
 }
