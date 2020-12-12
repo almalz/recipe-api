@@ -19,6 +19,7 @@
   "dependencies": {
     "@prisma/cli": "^2.12.1",
     "@prisma/client": "^2.12.1",
+    "@types/app-root-path": "^1.2.4",
     "@types/body-parser": "^1.19.0",
     "@types/errorhandler": "^1.5.0",
     "@types/eslint": "^7.2.5",
@@ -28,6 +29,7 @@
     "@types/shelljs": "^0.8.8",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
+    "app-root-path": "^3.0.0",
     "body-parser": "^1.19.0",
     "concurrently": "^5.3.0",
     "errorhandler": "^1.5.1",
@@ -41,7 +43,7 @@
     "pretty-quick": "^3.1.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2",
-    "util": "^0.12.3"
+    "winston": "^3.3.3"
   },
   "husky": {
     "hooks": {
