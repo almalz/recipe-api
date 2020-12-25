@@ -4,26 +4,26 @@ import { Request, Response } from 'express'
 
 export const getRecipe = async (req: Request, res: Response) => {
   const { id } = req.params
-  const Recipe: RecipeResult = await RecipeService.getRecipeById(Number(id))
-  if (Recipe) {
-    res.json(Recipe)
+  const recipe: RecipeResult = await RecipeService.getRecipeById(Number(id))
+  if (recipe) {
+    res.json(recipe)
   } else {
     res.status(404).send('Recipe not found')
   }
 }
 
 export const getAllRecipes = async (req: Request, res: Response) => {
-  const Recipes: RecipeListResult = await RecipeService.getAllRecipes()
-  if (Recipes) {
-    res.json(Recipes).send()
+  const recipes: RecipeListResult = await RecipeService.getAllRecipes()
+  if (recipes) {
+    res.json(recipes).send()
   } else {
     res.status(404).send('Recipes not found')
   }
 }
 
 export const postRecipe = async (req: Request, res: Response) => {
-  const { Recipe } = req.body
-  const result: RecipeResult = await RecipeService.postRecipe(Recipe)
+  const { body } = req
+  const result: RecipeResult = await RecipeService.postRecipe(body)
   if (result) {
     res.json(result)
   } else {
