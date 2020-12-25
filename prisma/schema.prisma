@@ -15,9 +15,10 @@ model Recipe {
   name                String
   prepTime            Int?
   cookingTime         Int?
-  instruction         Instruction           @relation(fields: [instructionId], references: [id])
-  instructionId       Int
+  instruction         Instruction?          @relation(fields: [instructionId], references: [id])
+  instructionId       Int?
   tags                Tag[]
+  imageUrl            String?
   sourceUrl           String?
   IngredientsOnRecipe IngredientsOnRecipe[]
 }
