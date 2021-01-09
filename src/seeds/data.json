@@ -1,0 +1,55 @@
+{
+  "recipes": [
+    {
+      "name": "penne bolognesse",
+      "prepTime": 10,
+      "cookingTime": 15,
+      "ingredients": [
+        {
+          "name": "Tomato sauce"
+        },
+        {
+          "name": "Ground beef"
+        },
+        {
+          "name": "Pasta"
+        }
+      ],
+      "image": "./seeds/assets/penne_bolognese.jpg"
+    },
+    {
+      "name": "cheeseburger",
+      "prepTime": 30,
+      "cookingTime": 10,
+      "ingredients": [
+        {
+          "name": "Burger bun"
+        },
+        {
+          "name": "Ground beef"
+        },
+        {
+          "name": "cheese slices"
+        }
+      ],
+      "image": "./seeds/assets/burger.jpg"
+    },
+    {
+      "name": "Pizza",
+      "prepTime": 20,
+      "cookingTime": 10,
+      "ingredients": [
+        {
+          "name": "Tomato sauce"
+        },
+        {
+          "name": "Mozzarella"
+        },
+        {
+          "name": "Pizza dough"
+        }
+      ],
+      "image": "./seeds/assets/pizza.jpg"
+    }
+  ]
+}
