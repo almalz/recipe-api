@@ -25,11 +25,18 @@ export const getRecipeById = async (recipeId: number) => {
   return recipe
 }
 
-export const getRecipeByName = async (RecipeName: string) => {
+export const getRecipeByName = async (recipeName: string) => {
   const recipe = await prisma.recipe
     .findFirst({
       where: {
-        name: RecipeName,
+        name: recipeName,
+      },
+      include: {
+        IngredientsOnRecipe: {
+          include: {
+            ingredient: true,
+          },
+        },
       },
     })
     .catch((error) => console.error(error))
@@ -41,7 +48,13 @@ export const getRecipeByName = async (RecipeName: string) => {
 export const getAllRecipes = async () => {
   const recipes = await prisma.recipe
     .findMany({
-      include: { IngredientsOnRecipe: true },
+      include: {
+        IngredientsOnRecipe: {
+          include: {
+            ingredient: true,
+          },
+        },
+      },
     })
     .catch((error) => console.error(error))
 
@@ -51,20 +64,24 @@ export const getAllRecipes = async () => {
 }
 
 export const deleteRecipe = async (recipeId: number) => {
+  // TODO : disconnect IoR relationships
+
+  const recipe = getRecipeById(recipeId)
+
   console.log(recipeId)
-  const recipe = await prisma.recipe
+  const deletedRecipe = await prisma.recipe
     .delete({
       where: { id: recipeId },
     })
     .catch((error) => console.error(error))
 
-  logger.debug('Deleting recipe :', recipe)
+  logger.debug('Deleting recipe :', deletedRecipe)
 
-  return recipe
+  return deletedRecipe
 }
 
 // TODO: replace 'any'
-export const postRecipe = async (body: any) => {
+export const postRecipe = async (body: any, file: any = null) => {
   logger.debug('Recipe input :', body)
   const recipe: any = await prisma.recipe
     .create({
@@ -81,12 +98,12 @@ export const postRecipe = async (body: any) => {
     .catch((error) => console.error(error))
   logger.debug('Creating recipe :', recipe)
 
-  const ingredients = body.ingredients
+  const ingredients = body.recipe.ingredients
 
-  logger.debug('Ingredient input :', body.ingredients)
+  logger.debug('Ingredients input :', body.ingredients)
 
   await ingredients.forEach(async (ingredient: Ingredient) => {
-    let ingredientsOnRecipe = await prisma.ingredientsOnRecipe
+    const ingredientsOnRecipe = await prisma.ingredientsOnRecipe
       .create({
         data: {
           recipe: {
@@ -107,6 +124,10 @@ export const postRecipe = async (body: any) => {
       .catch((error) => console.error(error))
     logger.debug('Connecting recipe to ingredients:', ingredientsOnRecipe)
   })
+
+  // const updateRecipeImage = async (recipeId) => {
+  //   return
+  // }
 
   return recipe
 }
