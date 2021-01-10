@@ -81,26 +81,27 @@ export const deleteRecipe = async (recipeId: number) => {
 }
 
 // TODO: replace 'any'
-export const postRecipe = async (body: any, file: any = null) => {
+export const postRecipe = async (body: any) => {
   logger.debug('Recipe input :', body)
   const recipe: any = await prisma.recipe
     .create({
       data: {
-        name: body.recipe.name,
-        prepTime: body.recipe.prepTime,
-        cookingTime: body.recipe.cookingTime,
-        sourceUrl: body.recipe.sourceUrl,
+        name: body.name,
+        prepTime: body.prepTime,
+        cookingTime: body.cookingTime,
+        sourceUrl: body.sourceUrl,
+        imageUrl: body.imageUrl,
         tags: {
-          connectOrCreate: body.recipe.tags,
+          connectOrCreate: body.tags,
         },
       },
     })
     .catch((error) => console.error(error))
   logger.debug('Creating recipe :', recipe)
 
-  const ingredients = body.recipe.ingredients
+  const ingredients = body.ingredients
 
-  logger.debug('Ingredients input :', body.ingredients)
+  logger.debug('Ingredients input :', ingredients)
 
   await ingredients.forEach(async (ingredient: Ingredient) => {
     const ingredientsOnRecipe = await prisma.ingredientsOnRecipe
