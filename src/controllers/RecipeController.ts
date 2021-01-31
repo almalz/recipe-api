@@ -1,6 +1,7 @@
 import { RecipeService } from '../services'
 import { Recipe, RecipeListResult, RecipeResult } from './../types'
 import { Request, Response } from 'express'
+import { RecipeController } from '.'
 
 export const getRecipe = async (req: Request, res: Response) => {
   const { id } = req.params
@@ -23,6 +24,9 @@ export const getAllRecipes = async (req: Request, res: Response) => {
 
 export const postRecipe = async (req: Request, res: Response) => {
   const { body } = req
+
+  body.userId =
+    req.userId !== null && req.userId !== undefined ? req.userId : undefined
   const result: RecipeResult = await RecipeService.postRecipe(body)
   if (result) {
     res.json(result)
@@ -38,5 +42,14 @@ export const deleteRecipe = async (req: Request, res: Response) => {
     res.json(result)
   } else {
     res.status(422).send(`Could not delete Recipe with id ${id}`)
+  }
+}
+
+export const getAllRecipesByUser = async (req: Request, res: Response) => {
+  if (req.userId) {
+    const { userId } = req
+    const result: RecipeListResult = await RecipeService.getAllRecipesByUserId(
+      userId,
+    )
   }
 }

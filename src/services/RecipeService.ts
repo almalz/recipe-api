@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import logger from '../config/logger'
-import { RecipeResult, Ingredient } from '../types'
+import { RecipeResult, RecipeListResult, Ingredient } from '../types'
 
 const prisma = new PrismaClient()
 
 export const getRecipeById = async (recipeId: number) => {
-  const recipe = await prisma.recipe
+  const recipe: RecipeResult = await prisma.recipe
     .findFirst({
       where: {
         id: recipeId,
@@ -26,7 +26,7 @@ export const getRecipeById = async (recipeId: number) => {
 }
 
 export const getRecipeByName = async (recipeName: string) => {
-  const recipe = await prisma.recipe
+  const recipe: RecipeResult = await prisma.recipe
     .findFirst({
       where: {
         name: recipeName,
@@ -46,7 +46,7 @@ export const getRecipeByName = async (recipeName: string) => {
 }
 
 export const getAllRecipes = async () => {
-  const recipes = await prisma.recipe
+  const recipes: RecipeListResult = await prisma.recipe
     .findMany({
       include: {
         IngredientsOnRecipe: {
@@ -65,8 +65,6 @@ export const getAllRecipes = async () => {
 
 export const deleteRecipe = async (recipeId: number) => {
   // TODO : disconnect IoR relationships
-
-  const recipe = getRecipeById(recipeId)
 
   console.log(recipeId)
   const deletedRecipe = await prisma.recipe
@@ -91,8 +89,18 @@ export const postRecipe = async (body: any) => {
         cookingTime: body.cookingTime,
         sourceUrl: body.sourceUrl,
         imageUrl: body.imageUrl,
-        tags: {
-          connectOrCreate: body.tags,
+        // tags: {
+        //   connectOrCreate: body.tags,
+        // },
+        user: {
+          connectOrCreate: {
+            where: {
+              firebaseId: body.userId,
+            },
+            create: {
+              firebaseId: body.userId,
+            },
+          },
         },
       },
     })
@@ -126,9 +134,33 @@ export const postRecipe = async (body: any) => {
     logger.debug('Connecting recipe to ingredients:', ingredientsOnRecipe)
   })
 
-  // const updateRecipeImage = async (recipeId) => {
-  //   return
-  // }
-
   return recipe
+}
+
+// const updateRecipeImage = async (recipeId) => {
+//   return {}
+// }
+
+export const getAllRecipesByUserId = async (userId: string) => {
+  if (userId) {
+    const recipes: RecipeListResult = await prisma.recipe
+      .findMany({
+        where: {
+          user: {
+            firebaseId: userId,
+          },
+        },
+        include: {
+          IngredientsOnRecipe: {
+            include: {
+              ingredient: true,
+            },
+          },
+        },
+      })
+      .catch((error) => console.error(error))
+
+    logger.debug('Fetching user recipes :', recipes)
+    return recipes
+  }
 }

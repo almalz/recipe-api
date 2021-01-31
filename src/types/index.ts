@@ -8,6 +8,7 @@ export type {
   Tag,
   InstructionStep,
   Instruction,
+  User,
 } from '@prisma/client'
 
 type Result = void | null

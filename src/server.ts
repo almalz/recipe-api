@@ -1,10 +1,12 @@
 import errorHandler from 'errorhandler'
 import app from './App'
+import cors from 'cors'
 
 /**
  * Error Handler. Provides full stack - remove for production
  */
 app.use(errorHandler())
+app.use(cors())
 
 /**
  * Start Express server.
