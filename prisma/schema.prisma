@@ -1,13 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
@@ -22,39 +19,34 @@ model Recipe {
   name                String
   prepTime            Int?
   cookingTime         Int?
-  instruction         Instruction?          @relation(fields: [instructionId], references: [id])
   instructionId       Int?
-  tags                Tag[]
   imageUrl            String?
   sourceUrl           String?
-  IngredientsOnRecipe IngredientsOnRecipe[]
-  user                User?                 @relation(fields: [userId], references: [id])
   userId              Int?
+  instruction         Instruction?          @relation(fields: [instructionId], references: [id])
+  user                User?                 @relation(fields: [userId], references: [id])
+  IngredientsOnRecipe IngredientsOnRecipe[]
+  tags                Tag[]
 }
 
 model Ingredient {
   id                        Int                   @id @default(autoincrement())
   name                      String                @unique
-  alternativeNames          Ingredient[]          @relation("IngredientToIngredient")
-  alternativeIngredientName Ingredient?           @relation("IngredientToIngredient", fields: [alternativeingredientId], references: [id])
   alternativeingredientId   Int?
+  alternativeIngredientName Ingredient?           @relation("IngredientToIngredient", fields: [alternativeingredientId], references: [id])
+  alternativeNames          Ingredient[]          @relation("IngredientToIngredient")
   IngredientsOnRecipe       IngredientsOnRecipe[]
 }
 
 model IngredientsOnRecipe {
   id           Int         @id @default(autoincrement())
-  recipe       Recipe      @relation(fields: [recipeId], references: [id])
   recipeId     Int
-  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
   ingredientId Int?
   base_amout   Int?
-  base_unit    Unit?       @relation(fields: [unitId], references: [id])
   unitId       Int?
-}
-
-enum System {
-  METRIC
-  US
+  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  recipe       Recipe      @relation(fields: [recipeId], references: [id])
+  base_unit    Unit?       @relation(fields: [unitId], references: [id])
 }
 
 model Unit {
@@ -73,14 +65,19 @@ model Tag {
 
 model Instruction {
   id       Int               @id @default(autoincrement())
-  steps    InstructionStep[]
   recipeId Int
+  steps    InstructionStep[]
   Recipe   Recipe[]
 }
 
 model InstructionStep {
   id            Int         @id @default(autoincrement())
   body          String
-  instruction   Instruction @relation(fields: [instructionId], references: [id])
   instructionId Int
+  instruction   Instruction @relation(fields: [instructionId], references: [id])
+}
+
+enum System {
+  METRIC
+  US
 }
