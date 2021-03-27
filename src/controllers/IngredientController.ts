@@ -30,7 +30,7 @@ export const postIngredient = async (req: Request, res: Response) => {
   )
 
   if (result) {
-    res.json(result)
+    res.status(201).json(result)
   } else {
     res.status(422).send('Could not create ingredient')
   }

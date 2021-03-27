@@ -29,7 +29,7 @@ export const postRecipe = async (req: Request, res: Response) => {
     req.userId !== null && req.userId !== undefined ? req.userId : undefined
   const result: RecipeResult = await RecipeService.postRecipe(body)
   if (result) {
-    res.json(result)
+    res.status(201).json(result)
   } else {
     res.status(422).send('Could not create Recipe')
   }
