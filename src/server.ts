@@ -1,5 +1,5 @@
 import errorHandler from 'errorhandler'
-import app from './App'
+import app from './app'
 import cors from 'cors'
 
 /**
