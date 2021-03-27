@@ -36,10 +36,6 @@ export const getAllIngredients = async () => {
     .findMany()
     .catch((error) => console.error(error))
 
-  console.log(
-    'Fetching ingredientssss',
-    // util.inspect(ingredients, false, null, true),
-  )
   logger.debug('Fetching ingredient :', ingredients)
 
   return ingredients
