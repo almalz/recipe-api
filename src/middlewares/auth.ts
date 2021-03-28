@@ -48,3 +48,37 @@ export const isAuthorized = async (
 export const getUserByUid = async (uid: string) => {
   return await admin.auth().getUser(uid)
 }
+
+export const createUser = async (email: string, password: string) => {
+  const user = await admin.auth().createUser({
+    email,
+    password,
+  })
+
+  if (user) {
+    return user
+  } else {
+    return {
+      error: {
+        message:
+          'You are not authorised to perform this action. SignUp/Login to continue',
+      },
+    }
+  }
+}
+
+export const deleteUser = async (uid: string) => {
+  return await admin
+    .auth()
+    .deleteUser(uid)
+    .then(() => true)
+    .catch((error) => error)
+}
+
+export const createCustomToken = async (uid: string) => {
+  return admin
+    .auth()
+    .createCustomToken(uid)
+    .then((createdToken) => createdToken)
+    .catch((error) => error)
+}
