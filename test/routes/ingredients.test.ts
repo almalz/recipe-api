@@ -3,7 +3,7 @@ import app from '../../src/app'
 import { Ingredient } from '../../src/types'
 
 let ingredient: Partial<Ingredient> = {
-  name: `test pasta ${Math.round(Math.random() * 10000)}`,
+  name: `test tomato ${Math.round(Math.random() * 10000)}`,
 }
 
 describe('POST /ingredient', () => {
@@ -41,7 +41,7 @@ describe('GET /ingredient', () => {
 })
 
 describe('DELETE /ingredient/:id', () => {
-  it('should return 200 OK and fetched ingredients', async (done) => {
+  it('should return 200 OK and deleted ingredient', async (done) => {
     const response = await request(app).delete(`/ingredient/${ingredient.id}`)
     expect(response.status).toBe(200)
     expect(response.body).toEqual(ingredient)
