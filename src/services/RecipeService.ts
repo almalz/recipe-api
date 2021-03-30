@@ -1,6 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import logger from '../config/logger'
-import { RecipeResult, RecipeListResult, Ingredient } from '../types'
+import {
+  RecipeResult,
+  RecipeListResult,
+  Ingredient,
+  PrismaError,
+} from '../types'
 
 const prisma = new PrismaClient()
 
@@ -18,7 +23,7 @@ export const getRecipeById = async (recipeId: number) => {
         },
       },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Fetching recipe :', recipe)
 
@@ -39,7 +44,7 @@ export const getRecipeByName = async (recipeName: string) => {
         },
       },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
   logger.debug('Fetching recipe :', recipe)
 
   return recipe
@@ -56,7 +61,7 @@ export const getAllRecipes = async () => {
         },
       },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Fetching recipes :', recipes)
 
@@ -71,7 +76,7 @@ export const deleteRecipe = async (recipeId: number) => {
     .delete({
       where: { id: recipeId },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Deleting recipe :', deletedRecipe)
 
@@ -104,7 +109,7 @@ export const postRecipe = async (body: any) => {
         },
       },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
   logger.debug('Creating recipe :', recipe)
 
   const ingredients = body.ingredients
@@ -130,7 +135,7 @@ export const postRecipe = async (body: any) => {
           },
         },
       })
-      .catch((error) => console.error(error))
+      .catch((error: PrismaError) => console.error(error))
     logger.debug('Connecting recipe to ingredients:', ingredientsOnRecipe)
   })
 
@@ -158,7 +163,7 @@ export const getAllRecipesByUserId = async (userId: string) => {
           },
         },
       })
-      .catch((error) => console.error(error))
+      .catch((error: PrismaError) => console.error(error))
 
     logger.debug('Fetching user recipes :', recipes)
     return recipes

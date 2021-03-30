@@ -11,6 +11,8 @@ export type {
   User,
 } from '@prisma/client'
 
+export type { PrismaError } from './errors'
+
 type Result = void | null
 
 export type IngredientResult = Ingredient | Result

@@ -1,5 +1,10 @@
 import { PrismaClient } from '@prisma/client'
-import { Ingredient, IngredientListResult, IngredientResult } from './../types'
+import {
+  Ingredient,
+  IngredientListResult,
+  IngredientResult,
+  PrismaError,
+} from './../types'
 import logger from '../config/logger'
 
 const prisma = new PrismaClient()
@@ -11,7 +16,7 @@ export const getIngredientById = async (ingredientId: number) => {
         id: ingredientId,
       },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Fetching ingredient :', ingredient)
 
@@ -25,7 +30,7 @@ export const getIngredientByName = async (ingredientName: string) => {
         name: ingredientName,
       },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
   logger.debug('Fetching ingredient :', ingredient)
 
   return ingredient
@@ -34,7 +39,7 @@ export const getIngredientByName = async (ingredientName: string) => {
 export const getAllIngredients = async () => {
   const ingredients: IngredientListResult = await prisma.ingredient
     .findMany()
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Fetching ingredient :', ingredients)
 
@@ -47,7 +52,7 @@ export const postIngredient = async (body: Ingredient) => {
     .create({
       data: { name: name },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Creating ingredient :', ingredient)
 
@@ -59,7 +64,7 @@ export const deleteIngredient = async (ingredientId: number) => {
     .delete({
       where: { id: ingredientId },
     })
-    .catch((error) => console.error(error))
+    .catch((error: PrismaError) => console.error(error))
 
   logger.debug('Deleting ingredient :', ingredient)
 
