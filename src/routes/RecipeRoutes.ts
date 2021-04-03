@@ -1,4 +1,3 @@
-import { S3Control } from 'aws-sdk'
 import * as express from 'express'
 import { checkAuth, isAuthorized } from '../middlewares/auth'
 

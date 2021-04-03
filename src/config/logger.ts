@@ -25,6 +25,7 @@ const options = {
 const logger = winston.createLogger({
   transports: [new winston.transports.File(options.file)],
   exitOnError: false, // do not exit on handled exceptions
+  silent: process.env.NODE_ENV === 'test',
 })
 
 if (process.env.NODE_ENV !== 'production') {

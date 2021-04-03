@@ -71,7 +71,6 @@ export const getAllRecipes = async () => {
 export const deleteRecipe = async (recipeId: number) => {
   // TODO : disconnect IngredientOnRecipe relationships
 
-  console.log(recipeId)
   const deletedRecipe = await prisma.recipe
     .delete({
       where: { id: recipeId },
