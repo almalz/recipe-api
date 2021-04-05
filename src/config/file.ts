@@ -18,11 +18,9 @@ export const uploadFile = async (file: any) => {
     Key: `${Date.now()}_${file.originalname}`,
   }
 
-  console.log('uploadParams', uploadParams)
-
   try {
     const response = await s3.upload(uploadParams).promise()
-    console.log(response)
+    return response
   } catch (error) {
     console.error(error)
   }
