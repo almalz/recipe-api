@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { admin } from '../config/firebase'
+import axios from 'axios'
 
 import logger from '../config/logger'
 
@@ -8,14 +9,10 @@ export const checkAuth = async (
   res: Response,
   next: NextFunction,
 ) => {
-  logger.debug('Auth header :', req.headers)
-
-  if (req.headers.idtoken) {
+  if (req.headers.authorization) {
+    const idToken = req.headers.authorization
     try {
-      console.log('token', req.headers.idtoken as string)
-      const payload = await admin
-        .auth()
-        .verifyIdToken(req.headers.idtoken as string)
+      const payload = await admin.auth().verifyIdToken(idToken)
       req.userId = payload.uid
       next()
     } catch (error) {
@@ -49,10 +46,15 @@ export const getUserByUid = async (uid: string) => {
   return await admin.auth().getUser(uid)
 }
 
-export const createUser = async (email: string, password: string) => {
+export const createUser = async (
+  email: string,
+  password: string | undefined,
+  emailVerified: boolean | undefined = undefined,
+) => {
   const user = await admin.auth().createUser({
     email,
     password,
+    emailVerified: false,
   })
 
   if (user) {
@@ -81,4 +83,27 @@ export const createCustomToken = async (uid: string) => {
     .createCustomToken(uid)
     .then((createdToken) => createdToken)
     .catch((error) => error)
+}
+
+export const verifyCustomToken = async (customToken: string) => {
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
+  try {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${GOOGLE_API_KEY}`
+    const tokenRes = await axios({
+      method: 'post',
+      url,
+      data: {
+        token: customToken,
+        returnSecureToken: true,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const verifiedToken = await tokenRes.data.idToken
+    return verifiedToken
+  } catch (error) {
+    console.error(error)
+  }
 }
