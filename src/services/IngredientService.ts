@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../prisma/client'
 import {
   Ingredient,
   IngredientListResult,
@@ -6,8 +6,6 @@ import {
   PrismaError,
 } from './../types'
 import logger from '../config/logger'
-
-const prisma = new PrismaClient()
 
 export const getIngredientById = async (ingredientId: number) => {
   const ingredient: IngredientResult = await prisma.ingredient

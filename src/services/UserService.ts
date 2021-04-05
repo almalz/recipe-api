@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../prisma/client'
+
 import logger from '../config/logger'
 import { User, PrismaError } from '../types'
-
-const prisma = new PrismaClient()
 
 export const createUser = async (body: any) => {
   const user: any = await prisma.user

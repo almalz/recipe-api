@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../prisma/client'
 import logger from '../config/logger'
 import {
   RecipeResult,
@@ -6,8 +6,6 @@ import {
   Ingredient,
   PrismaError,
 } from '../types'
-
-const prisma = new PrismaClient()
 
 export const getRecipeById = async (recipeId: number) => {
   const recipe: RecipeResult = await prisma.recipe
