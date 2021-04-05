@@ -25,6 +25,7 @@ export const getAllIngredients = async (req: Request, res: Response) => {
 
 export const postIngredient = async (req: Request, res: Response) => {
   const { ingredient } = req.body
+  console.log('ingredient', ingredient)
   const result: IngredientResult = await IngredientService.postIngredient(
     ingredient,
   )
