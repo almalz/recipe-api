@@ -60,7 +60,9 @@ describe('Authenticated recipies routes', () => {
       // .field('name', recipe.name)
 
       expect(response.status).toBe(201)
-      expect(response.body.fileUrl).toContain(recipe.imagePath.split('/')[3])
+      expect(response.body.fileUrl).toContain(
+        recipe.imagePath.split('/')[recipe.imagePath.split('/').length - 1],
+      )
 
       done()
     })
