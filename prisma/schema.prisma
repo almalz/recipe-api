@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
@@ -21,13 +21,14 @@ model Recipe {
   prepTime            Int?
   cookingTime         Int?
   instructionId       Int?
-  imageUrl            String?
   sourceUrl           String?
   userId              Int?
   instruction         Instruction?          @relation(fields: [instructionId], references: [id])
   user                User?                 @relation(fields: [userId], references: [id])
   IngredientsOnRecipe IngredientsOnRecipe[]
   tags                Tag[]
+  image               File?                 @relation(fields: [fileId], references: [id])
+  fileId              Int?
 }
 
 model Ingredient {
@@ -76,6 +77,13 @@ model InstructionStep {
   body          String
   instructionId Int
   instruction   Instruction @relation(fields: [instructionId], references: [id])
+}
+
+model File {
+  id          Int      @id @default(autoincrement())
+  locationURL String   @unique
+  key         String   @unique
+  Recipe      Recipe[]
 }
 
 enum System {

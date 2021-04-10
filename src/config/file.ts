@@ -9,7 +9,7 @@ AWS.config.update({
 
 const s3 = new AWS.S3({ endpoint: process.env.CELLAR_HOST })
 
-// upload
+// upload File
 
 export const uploadFile = async (file: any) => {
   const uploadParams = {
@@ -26,9 +26,21 @@ export const uploadFile = async (file: any) => {
   }
 }
 
-// getlink
+// delete File
 
-// delete
+export const deleteFile = async (file: any) => {
+  const params = {
+    Bucket: process.env.CELLAR_BUCKET_NAME as string,
+    Key: file.key,
+  }
+
+  try {
+    const response = await s3.deleteObject(params).promise()
+    return true
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 export const clearTempFolder = () => {
   const directory = 'temp'

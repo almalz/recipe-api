@@ -4,7 +4,8 @@ import * as firebase from 'firebase-admin'
 import app from '../../src/app'
 import { admin } from '../../src/config/firebase'
 import * as auth from '../../src/middlewares/auth'
-import { Recipe, Ingredient } from '../../src/types'
+import { Recipe, Ingredient, File } from '../../src/types'
+import * as FileManager from '../../src/config/file'
 
 const recipe = {
   name: `test pasta ${Math.round(Math.random() * 10000)}`,
@@ -22,6 +23,7 @@ const recipe = {
     },
   ],
   imagePath: './test/assets/pancakes.jpg',
+  imageURL: '',
 }
 
 describe('Authenticated recipies routes', () => {
@@ -43,6 +45,11 @@ describe('Authenticated recipies routes', () => {
 
   afterAll(async () => {
     auth.deleteUser(user.uid)
+    // if(recipe.imageURL !== '' ){
+    //   try{
+    //     FileManager.deleteFileByUrl()
+    //   }
+    // }
   })
 
   describe('POST /upload', () => {
@@ -52,19 +59,25 @@ describe('Authenticated recipies routes', () => {
         .set('Authorization', user.token)
         .attach('recipeImage', recipe.imagePath)
 
-      // .field('name', recipe.name)
-      // .field('cookingTime', recipe.cookingTime)
-      // .field('prepTime', recipe.prepTime)
-      // .field('ingredients', recipe.ingredients)
-      // .field('name', recipe.name)
-      // .field('name', recipe.name)
+      console.log('body', response.body)
+
+      const fileName = recipe.imagePath.split('/')[
+        recipe.imagePath.split('/').length - 1
+      ]
 
       expect(response.status).toBe(201)
-      expect(response.body.fileUrl).toContain(
-        recipe.imagePath.split('/')[recipe.imagePath.split('/').length - 1],
-      )
+      expect(response.body.locationURL).toContain(fileName)
+
+      recipe.imageURL = response.body.locationURL
 
       done()
     })
   })
+
+  // .field('name', recipe.name)
+  // .field('cookingTime', recipe.cookingTime)
+  // .field('prepTime', recipe.prepTime)
+  // .field('ingredients', recipe.ingredients)
+  // .field('name', recipe.name)
+  // .field('name', recipe.name)
 })

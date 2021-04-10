@@ -90,7 +90,7 @@ export const postRecipe = async (body: any) => {
         prepTime: body.prepTime,
         cookingTime: body.cookingTime,
         sourceUrl: body.sourceUrl,
-        imageUrl: body.imageUrl,
+        image: {},
         // tags: {
         //   connectOrCreate: body.tags,
         // },

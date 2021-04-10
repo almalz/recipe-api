@@ -1,4 +1,4 @@
-import { Ingredient, Recipe } from '@prisma/client'
+import { Ingredient, Recipe, File } from '@prisma/client'
 
 export type {
   Ingredient,
@@ -9,6 +9,7 @@ export type {
   InstructionStep,
   Instruction,
   User,
+  File,
 } from '@prisma/client'
 
 export type { PrismaError } from './errors'
@@ -22,3 +23,5 @@ export type IngredientListResult = Ingredient[] | Result
 export type RecipeResult = Recipe | Result
 
 export type RecipeListResult = Recipe[] | Result
+
+export type FileResult = File | Result
