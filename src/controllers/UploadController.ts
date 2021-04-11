@@ -5,7 +5,7 @@ import { File, FileResult } from '../types'
 
 export const uploadFile = async (req: Request, res: Response) => {
   if (req.file) {
-    const file = await FileManager.uploadFile(req.file)
+    const file = await FileService.createFile(req.file)
     if (file) {
       res.status(201).json(file)
     } else {

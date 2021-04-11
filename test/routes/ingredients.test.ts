@@ -26,7 +26,6 @@ describe('GET /ingredient/:id', () => {
     const response = await request(app).get(`/ingredient/${ingredient.id}`)
 
     expect(response.status).toBe(200)
-    console.log('ingredient', response.body)
     expect(response.body.name).toEqual(ingredient.name)
 
     done()

@@ -27,7 +27,7 @@ model Recipe {
   user                User?                 @relation(fields: [userId], references: [id])
   IngredientsOnRecipe IngredientsOnRecipe[]
   tags                Tag[]
-  image               File?                 @relation(fields: [fileId], references: [id])
+  file                File?                 @relation(fields: [fileId], references: [id])
   fileId              Int?
 }
 
@@ -42,13 +42,15 @@ model Ingredient {
 
 model IngredientsOnRecipe {
   id           Int         @id @default(autoincrement())
-  recipeId     Int
+  recipeId     Int?
   ingredientId Int?
   base_amout   Int?
   unitId       Int?
   ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
-  recipe       Recipe      @relation(fields: [recipeId], references: [id])
+  recipe       Recipe?     @relation(fields: [recipeId], references: [id])
   base_unit    Unit?       @relation(fields: [unitId], references: [id])
+
+  @@unique([recipeId, ingredientId])
 }
 
 model Unit {

@@ -6,8 +6,9 @@ import { admin } from '../../src/config/firebase'
 import * as auth from '../../src/middlewares/auth'
 import { Recipe, Ingredient, File } from '../../src/types'
 import * as FileManager from '../../src/config/file'
+import { LexRuntimeV2 } from 'aws-sdk'
 
-const recipe = {
+let recipe: any = {
   name: `test pasta ${Math.round(Math.random() * 10000)}`,
   prepTime: Math.round(Math.random() * 100),
   cookingTime: Math.round(Math.random() * 100),
@@ -65,6 +66,8 @@ describe('Authenticated recipies routes', () => {
         recipe.imagePath.split('/').length - 1
       ]
 
+      console.log(response.body)
+
       expect(response.status).toBe(201)
       expect(response.body.locationURL).toContain(fileName)
 
@@ -94,7 +97,29 @@ describe('Authenticated recipies routes', () => {
       })
       expect(recipeResult.ingredients).toEqual(recipe.ingredients)
 
+      recipe = recipeResult
+
       done()
     })
+  })
+})
+
+describe('GET /recipe/:id', () => {
+  it('should return 200 OK and fetched recipe', async (done) => {
+    const response = await request(app).get(`/recipe/${recipe.id}`)
+    expect(response.status).toBe(200)
+    expect(response.body.name).toEqual(recipe.name)
+    done()
+  })
+})
+
+describe('DELETE /recipe/:id', () => {
+  it('should return 200 OK and deleted recipe', async (done) => {
+    const response = await request(app).delete(`/recipe/${recipe.id}`)
+    const recipeResult = await response.body
+    expect(response.status).toBe(200)
+    expect(response.body.name).toEqual(recipe.name)
+    expect(response.body.file).toEqual(response.body.deletedFile)
+    done()
   })
 })

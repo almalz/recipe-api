@@ -8,6 +8,7 @@ import {
   IngredientsOnRecipe,
   PrismaError,
 } from '../types'
+import { FileService } from './index'
 
 export const getRecipeById = async (recipeId: number) => {
   const recipe: RecipeResult = await prisma.recipe
@@ -71,13 +72,25 @@ export const getAllRecipes = async () => {
 export const deleteRecipe = async (recipeId: number) => {
   // TODO : disconnect IngredientOnRecipe relationships
 
-  const deletedRecipe = await prisma.recipe
+  const deletedRecipe: any = await prisma.recipe
     .delete({
       where: { id: recipeId },
+      include: { file: true },
     })
     .catch((error: PrismaError) => console.error(error))
 
+  await prisma.ingredientsOnRecipe
+    .deleteMany({
+      where: { recipeId: recipeId },
+    })
+    .catch((error: PrismaError) => console.error(error))
+
+  const deletedFile = await FileService.deleteFile(deletedRecipe.fileId)
+
+  Object.assign(deletedRecipe, { deletedFile })
+
   logger.debug('Deleting recipe :', deletedRecipe)
+  console.log(deletedRecipe)
 
   return deletedRecipe
 }
@@ -93,7 +106,7 @@ export const createRecipe = async (body: any) => {
         prepTime: body.prepTime,
         cookingTime: body.cookingTime,
         sourceUrl: body.sourceUrl,
-        image: {
+        file: {
           connect: {
             locationURL: body.imageURL,
           },
