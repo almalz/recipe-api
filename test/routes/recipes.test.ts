@@ -66,8 +66,6 @@ describe('Authenticated recipies routes', () => {
         recipe.imagePath.split('/').length - 1
       ]
 
-      console.log(response.body)
-
       expect(response.status).toBe(201)
       expect(response.body.locationURL).toContain(fileName)
 

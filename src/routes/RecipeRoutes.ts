@@ -1,8 +1,6 @@
 import * as express from 'express'
 import { checkAuth, isAuthorized } from '../middlewares/auth'
 
-import { checkAuth, isAuthorized } from '../middlewares/auth'
-
 const router = express.Router()
 
 import { RecipeController } from '../controllers'
