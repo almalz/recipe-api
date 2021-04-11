@@ -1,9 +1,11 @@
 import prisma from '../../prisma/client'
 import logger from '../config/logger'
 import {
+  Recipe,
   RecipeResult,
   RecipeListResult,
   Ingredient,
+  IngredientsOnRecipe,
   PrismaError,
 } from '../types'
 
@@ -81,8 +83,9 @@ export const deleteRecipe = async (recipeId: number) => {
 }
 
 // TODO: replace 'any'
-export const postRecipe = async (body: any) => {
+export const createRecipe = async (body: any) => {
   logger.debug('Recipe input :', body)
+
   const recipe: any = await prisma.recipe
     .create({
       data: {
@@ -90,7 +93,11 @@ export const postRecipe = async (body: any) => {
         prepTime: body.prepTime,
         cookingTime: body.cookingTime,
         sourceUrl: body.sourceUrl,
-        image: {},
+        image: {
+          connect: {
+            locationURL: body.imageURL,
+          },
+        },
         // tags: {
         //   connectOrCreate: body.tags,
         // },
@@ -105,43 +112,58 @@ export const postRecipe = async (body: any) => {
           },
         },
       },
+      include: {
+        user: true,
+      },
     })
     .catch((error: PrismaError) => console.error(error))
   logger.debug('Creating recipe :', recipe)
 
   const ingredients = body.ingredients
 
-  logger.debug('Ingredients input :', ingredients)
+  let ingredientArray: any[] = []
 
-  await ingredients.forEach(async (ingredient: Ingredient) => {
-    const ingredientsOnRecipe = await prisma.ingredientsOnRecipe
-      .create({
-        data: {
-          recipe: {
-            connect: { id: recipe.id },
-          },
-          ingredient: {
-            connectOrCreate: {
-              where: {
-                name: ingredient.name,
-              },
-              create: {
-                name: ingredient.name,
-              },
+  const ingredientsOnRecipe = await Promise.all(
+    ingredients.map(async (ingredient: Ingredient) => {
+      return await connectIngredientToRecipe(recipe, ingredient)
+    }),
+  )
+
+  if (ingredientsOnRecipe.length > 0) {
+    recipe.ingredients = ingredientsOnRecipe.map((ior: any) => ior.ingredient)
+  }
+
+  return await recipe
+}
+
+export const connectIngredientToRecipe = async (
+  recipe: Recipe,
+  ingredient: Ingredient,
+) => {
+  const ingredientsOnRecipe = await prisma.ingredientsOnRecipe
+    .create({
+      data: {
+        recipe: {
+          connect: { id: recipe.id },
+        },
+        ingredient: {
+          connectOrCreate: {
+            where: {
+              name: ingredient.name,
+            },
+            create: {
+              name: ingredient.name,
             },
           },
         },
-      })
-      .catch((error: PrismaError) => console.error(error))
-    logger.debug('Connecting recipe to ingredients:', ingredientsOnRecipe)
-  })
-
-  return recipe
+      },
+      include: {
+        ingredient: true,
+      },
+    })
+    .catch((error: PrismaError) => console.error(error))
+  return ingredientsOnRecipe
 }
-
-// const updateRecipeImage = async (recipeId) => {
-//   return {}
-// }
 
 export const getAllRecipesByUserId = async (userId: string) => {
   if (userId) {

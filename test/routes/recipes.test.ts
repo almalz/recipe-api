@@ -24,6 +24,7 @@ const recipe = {
   ],
   imagePath: './test/assets/pancakes.jpg',
   imageURL: '',
+  userId: '',
 }
 
 describe('Authenticated recipies routes', () => {
@@ -38,6 +39,7 @@ describe('Authenticated recipies routes', () => {
     const response = await auth.createUser(user.email, undefined, false)
     const userResponse = response as admin.auth.UserRecord
     user.uid = userResponse.uid
+    recipe.userId = user.uid
     const createdToken = await auth.createCustomToken(user.uid)
     const verifiedToken = await auth.verifyCustomToken(createdToken)
     user.token = verifiedToken
@@ -53,13 +55,11 @@ describe('Authenticated recipies routes', () => {
   })
 
   describe('POST /upload', () => {
-    it('should return 201 and the URL of the uploaded file', async (done) => {
+    it('should return 201 and the data of the uploaded file', async (done) => {
       const response = await request(app)
         .post('/upload')
         .set('Authorization', user.token)
         .attach('recipeImage', recipe.imagePath)
-
-      console.log('body', response.body)
 
       const fileName = recipe.imagePath.split('/')[
         recipe.imagePath.split('/').length - 1
@@ -74,10 +74,27 @@ describe('Authenticated recipies routes', () => {
     })
   })
 
-  // .field('name', recipe.name)
-  // .field('cookingTime', recipe.cookingTime)
-  // .field('prepTime', recipe.prepTime)
-  // .field('ingredients', recipe.ingredients)
-  // .field('name', recipe.name)
-  // .field('name', recipe.name)
+  describe('POST /recipe', () => {
+    it('should return 201 and the created recipe', async (done) => {
+      const response = await request(app)
+        .post('/recipe')
+        .set('Authorization', user.token)
+        .send(recipe)
+
+      expect(response.status).toBe(201)
+
+      const recipeResult = await response.body
+
+      expect(recipeResult.name).toEqual(recipe.name)
+      expect(recipeResult.cookingTime).toEqual(recipe.cookingTime)
+      expect(recipeResult.prepTime).toEqual(recipe.prepTime)
+      recipeResult.ingredients.forEach((ingredient: any) => {
+        delete ingredient.id
+        delete ingredient.alternativeingredientId
+      })
+      expect(recipeResult.ingredients).toEqual(recipe.ingredients)
+
+      done()
+    })
+  })
 })

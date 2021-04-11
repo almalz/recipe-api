@@ -44,7 +44,7 @@ export const getAllIngredients = async () => {
   return ingredients
 }
 
-export const postIngredient = async (body: Ingredient) => {
+export const createIngredient = async (body: Ingredient) => {
   const { name } = body
   const ingredient: IngredientResult = await prisma.ingredient
     .create({

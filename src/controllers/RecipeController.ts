@@ -23,12 +23,12 @@ export const getAllRecipes = async (req: Request, res: Response) => {
 }
 
 export const postRecipe = async (req: Request, res: Response) => {
-  const { recipe } = req.body
+  const recipe = req.body
 
   recipe.userId =
     req.userId !== null && req.userId !== undefined ? req.userId : undefined
 
-  const result: RecipeResult = await RecipeService.postRecipe(recipe)
+  const result: RecipeResult = await RecipeService.createRecipe(recipe)
   if (result) {
     res.status(201).json(result)
   } else {
