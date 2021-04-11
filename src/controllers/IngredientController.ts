@@ -25,12 +25,12 @@ export const getAllIngredients = async (req: Request, res: Response) => {
 
 export const postIngredient = async (req: Request, res: Response) => {
   const { ingredient } = req.body
-  const result: IngredientResult = await IngredientService.postIngredient(
+  const result: IngredientResult = await IngredientService.createIngredient(
     ingredient,
   )
 
   if (result) {
-    res.json(result)
+    res.status(201).json(result)
   } else {
     res.status(422).send('Could not create ingredient')
   }

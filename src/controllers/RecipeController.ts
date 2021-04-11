@@ -1,6 +1,7 @@
+import { Request, Response } from 'express'
+
 import { RecipeService } from '../services'
 import { Recipe, RecipeListResult, RecipeResult } from './../types'
-import { Request, Response } from 'express'
 
 export const getRecipe = async (req: Request, res: Response) => {
   const { id } = req.params
@@ -22,10 +23,14 @@ export const getAllRecipes = async (req: Request, res: Response) => {
 }
 
 export const postRecipe = async (req: Request, res: Response) => {
-  const { body } = req
-  const result: RecipeResult = await RecipeService.postRecipe(body)
+  const recipe = req.body
+
+  recipe.userId =
+    req.userId !== null && req.userId !== undefined ? req.userId : undefined
+
+  const result: RecipeResult = await RecipeService.createRecipe(recipe)
   if (result) {
-    res.json(result)
+    res.status(201).json(result)
   } else {
     res.status(422).send('Could not create Recipe')
   }
@@ -38,5 +43,14 @@ export const deleteRecipe = async (req: Request, res: Response) => {
     res.json(result)
   } else {
     res.status(422).send(`Could not delete Recipe with id ${id}`)
+  }
+}
+
+export const getAllRecipesByUser = async (req: Request, res: Response) => {
+  if (req.userId) {
+    const { userId } = req
+    const result: RecipeListResult = await RecipeService.getAllRecipesByUserId(
+      userId,
+    )
   }
 }
