@@ -28,10 +28,10 @@ export const uploadFile = async (file: any) => {
 
 // delete File
 
-export const deleteFile = async (file: any) => {
+export const deleteFile = async (fileKey: string) => {
   const params = {
     Bucket: process.env.CELLAR_BUCKET_NAME as string,
-    Key: file.key,
+    Key: fileKey,
   }
 
   try {

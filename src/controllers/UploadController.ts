@@ -5,13 +5,8 @@ import { File, FileResult } from '../types'
 
 export const uploadFile = async (req: Request, res: Response) => {
   if (req.file) {
-    const response = await FileManager.uploadFile(req.file)
-    if (response) {
-      const fileResponse: Partial<File> = {
-        locationURL: response.Location,
-        key: response.Key,
-      }
-      const file: FileResult = await FileService.createFile(fileResponse)
+    const file = await FileManager.uploadFile(req.file)
+    if (file) {
       res.status(201).json(file)
     } else {
       res.status(500).send('Could not upload file')
