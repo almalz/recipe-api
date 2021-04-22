@@ -90,7 +90,6 @@ export const deleteRecipe = async (recipeId: number) => {
   Object.assign(deletedRecipe, { deletedFile })
 
   logger.debug('Deleting recipe :', deletedRecipe)
-  console.log(deletedRecipe)
 
   return deletedRecipe
 }

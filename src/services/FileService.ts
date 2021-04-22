@@ -20,7 +20,6 @@ export const getFileByUrl = async (url: string) => {
 export const createFile = async (body: any) => {
   const uploadResponse = await FileManager.uploadFile(body)
   if (uploadResponse) {
-    console.log(uploadResponse)
     const file: FileResult = await prisma.file
       .create({
         data: { locationURL: uploadResponse.Location, key: uploadResponse.Key },
